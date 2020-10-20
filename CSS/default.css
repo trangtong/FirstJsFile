@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#notification {
+    background: url("../Img/noun_incorrect_1540364.svg") no-repeat left;
+    background-size: auto;
+    color:red;
+}

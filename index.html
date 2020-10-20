@@ -1,11 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+
+    <link rel="icon" href="Img/calculator-icon.jpg" />
+    <link rel="stylesheet" href="CSS/default.css" />
+    <title>Calculator</title>
+  </head>
+  <body>
+    <script>
+      function GreetingMessage () {
+        window.alert("Calculator tool");
+      }
+      window.onload = GreetingMessage;
+    </script>
+    <div class="container">
+      <h1 class="title">Bé tập tính</h1>
+      <form action="">
+        <div class="form-group row">
+          <div class="col-md-5">
+            <div class="form-group row">
+              <label for="1stNum" class="col-md-5 col-form-label"
+                >Số thứ nhất</label
+              >
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="1stNum"
+                  name="operand"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="2ndNum" class="col-sm-5 col-form-label"
+                >Số thứ hai</label
+              >
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="2ndNum"
+                  name="operand"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <p class="col-sm-5">Kết quả</p>
+              <div
+                class="col-sm-6 border border-secondary ml-3"
+                id="result"
+              ></div>
+            </div>
+            <div class="col-sm-9 pl-4" id="notification"></div>
+          </div>
+          <div class="col-md">
+            <div class="form-group row">
+              <div class="col-md-2">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="add"
+                    name="operator"
+                    value="add"
+                  />
+                  <label for="add" class="form-check-label">Cộng</label>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="sub"
+                    name="operator"
+                    value="sub"
+                  />
+                  <label for="sub" class="form-check-label">Trừ</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-2">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="multi"
+                    name="operator"
+                    value="multi"
+                  />
+                  <label for="multi" class="form-check-label">Nhân</label>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="div"
+                    name="operator"
+                    value="div"
+                  />
+                  <label for="div" class="form-check-label">Chia</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-4">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="calc"
+                >
+                  Tính
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /col-->
+        </div>
+      </form>
+    </div>
+    <!-- /container -->
+
+    <script>
+      // notification
+      const note = [
+        "Vui lòng nhập số thực!",
+        "Vui lòng chọn phép tính!",
+        "Vui lòng điền đủ 2 toán hạng!",
+      ];
+      // <=> onclick but better
+      document.getElementById("calc").addEventListener("click", verify);
+
+      // <=> onfocusout but better
+      document.getElementById("1stNum").addEventListener("focusout", isNum);
+      document.getElementById("2ndNum").addEventListener("focusout", isNum);
+
+      function reRender() {
+        document.getElementById("notification").innerHTML = "";
+      }
+
+      //Check input is Number or not
+      function isNum() {
+        if (Number.isNaN(parseInt(this.value), 10)) {
+          document.getElementById("notification").innerHTML = note[0];
+        }
+      }
+
+      function verify() {
+        //get value of the input field
+        const fNum = parseInt(document.getElementById("1stNum").value, 10);
+        const sNum = parseInt(document.getElementById("2ndNum").value, 10);
+        // get operator
+        const opt = document.getElementsByName("operator");
+
+        // find which operator is checked
+        let selected = Array.from(opt).find((i) => i.checked);
+
+        // Validate data type of  operand
+        // if (Number.isNaN(fNum) || Number.isNaN(sNum)) { // Check if input is number or not
+        if (!fNum || !sNum) {
+          // input is empty or not
+          document.getElementById("notification").innerHTML = note[2];
+        }
+        //  operator is selected or not
+        else if (typeof selected === "undefined") {
+          document.getElementById("notification").innerHTML = note[1];
+        } else {
+          reRender();
+          calc(fNum, sNum, selected.value);
+        }
+      }
+
+      function calc(fNum, sNum, opt) {
+        let output; //display on screen
+        switch (opt) {
+          case "add":
+            output = fNum + sNum;
+            document.getElementById("result").innerHTML = output;
+            break;
+          case "sub":
+            output = fNum - sNum;
+            document.getElementById("result").innerHTML = output;
+            break;
+          case "multi":
+            output = fNum * sNum;
+            document.getElementById("result").innerHTML = output;
+            break;
+          case "div":
+            output = fNum / sNum;
+            document.getElementById("result").innerHTML = output;
+            break;
+        }
+      }
+    </script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
